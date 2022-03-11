@@ -15,6 +15,12 @@ typedef struct matrix {
     glm::mat4 mvp;
 } matrix_t;
 
+typedef struct obj_components {
+    std::vector<vec3> vertices;
+    std::vector<vec2> uvs;
+    std::vector<vec3> normals;
+} obj_components_t;
+
 triangle_t *do_triangle(void);
 void draw_triangle(GLuint vertexbuffer);
 GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path);
@@ -25,4 +31,5 @@ GLuint loadDDS(const char * imagepath);
 void computeMatricesFromInputs(void);
 glm::mat4 getViewMatrix(void);
 glm::mat4 getProjectionMatrix(void);
-bool loadOBJ(const char *path, std::vector<vec3> & out_vertices, std::vector<vec2> & out_uvs, std::vector<vec3> & out_normals);
+bool loadOBJ(const char *path, std::vector<vec3> & out_vertices, std::vector<vec2> & out_uvs, std::vector<vec3> & out_normals, int iteration);
+obj_components_t *generate_chunk(int iteration);

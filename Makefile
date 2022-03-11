@@ -9,9 +9,10 @@ SRC = src/main.cpp \
 	  src/shader.cpp \
 	  src/texture.cpp \
 	  src/common/control.cpp \
-	  src/common/objloader.cpp
+	  src/common/objloader.cpp \
+	  src/generation/generate_chunk.cpp
 
-CFLAGS = -Wall -Wextra -g -I ./include/
+CFLAGS = -Wall -Wextra -I ./include/
 
 OBJ = $(SRC:.c=.o)
 
@@ -19,22 +20,22 @@ LIB = -L/usr/local/include/
 
 FLAGS = -lGLEW -lglfw -lGL -lm -lX11 -lpthread -lXi -lXrandr -ldl
 
-NAME = open_gl
+NAME = minecraft
 
 all: NAME
 
 NAME: $(OBJ)
-	g++ -g $(OBJ) -o $(NAME) $(LIB) $(FLAGS)
+	$(CXX) $(OBJ) -o $(NAME) $(LIB) $(FLAGS) $(CFLAGS)
 
 clean:
-	rm -f $(OBJ)
+	rm -f *.o
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-debug: fclean $(OBJ)
-	make -C lib/my/
-	make clean -C lib/my/
-	$(CC) -g $(OBJ) -o $(NAME) $(INCLUDE) $(LIB) $(FLAGS)
+debug: CFLAGS += -g
+debug: re
+
+.PHONY: all clean fclean re debug

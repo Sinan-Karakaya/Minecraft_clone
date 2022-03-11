@@ -90,6 +90,8 @@ void computeMatricesFromInputs(void)
         position -= right * deltaTime * speed;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         position.y += 0.5;
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+        position.y -= 0.5;
 
     //projection matrix : 45&deg; fov, 4:3, display range
     ProjectionMatrix = perspective(radians(initialFoV), 16.0f/9.0f, 0.1f, 100.0f);

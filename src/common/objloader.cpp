@@ -9,7 +9,8 @@ bool loadOBJ(
 	const char * path,
 	std::vector<glm::vec3> & out_vertices,
 	std::vector<glm::vec2> & out_uvs,
-	std::vector<glm::vec3> & out_normals
+	std::vector<glm::vec3> & out_normals,
+	int iteration
 ){
 	printf("Loading OBJ file %s...\n", path);
 
@@ -21,7 +22,7 @@ bool loadOBJ(
 
 	FILE * file = fopen(path, "r");
 	if( file == NULL ){
-		printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
+		fprintf(stderr, "Impossible to open .obj file\n");
 		getchar();
 		return false;
 	}
@@ -37,6 +38,9 @@ bool loadOBJ(
 		if ( strcmp( lineHeader, "v" ) == 0 ){
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z );
+			vertex.x *= iteration;
+			vertex.y *= iteration;
+			vertex.z *= iteration;
 			temp_vertices.push_back(vertex);
 		}else if ( strcmp( lineHeader, "vt" ) == 0 ){
 			glm::vec2 uv;
@@ -52,7 +56,7 @@ bool loadOBJ(
 			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 			if (matches != 9){
-				printf("File can't be read by our simple parser :-( Try exporting with other options\n");
+				fprintf(stderr, "Parser can't read file, try changing export parameters\n");
 				fclose(file);
 				return false;
 			}

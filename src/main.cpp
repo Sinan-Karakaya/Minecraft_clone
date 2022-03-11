@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2022
+** PERSONNAL PROJECT, 2022
 ** opengl
 ** File description:
 ** main file
@@ -66,15 +66,20 @@ int main_loop(void)
     GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
     //load texture
-    GLuint Texture = loadDDS("./assets/texture/uvmap.DDS");
+    GLuint Texture = loadDDS("./assets/texture/dirt.dds");
+    // GLuint Texture = loadBMP_custom("./assets/texture/dirt.bmp");
     GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
     //read our .obj
-    std::vector<vec3> vertices;
-    std::vector<vec2> uvs;
-    std::vector<vec3> normals;
-    bool res = loadOBJ("./assets/cube.obj", vertices, uvs, normals);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), &vertices[0], GL_STATIC_DRAW);
+    // std::vector<vec3> vertices;
+    // std::vector<vec2> uvs;
+    // std::vector<vec3> normals;
+    // loadOBJ("./assets/cube.obj", vertices, uvs, normals);
+    // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), &vertices[0], GL_STATIC_DRAW);
+    obj_components_t *obj_comp;
+    for (int i = 0; i < 10; i++) {
+        obj_comp = generate_chunk(i);
+    }
 
     // This will identify our vertex buffer
     GLuint vertexbuffer;
@@ -83,13 +88,13 @@ int main_loop(void)
     // The following commands will talk about our 'vertexbuffer' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vec3), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, obj_comp->vertices.size() * sizeof(vec3), &obj_comp->vertices[0], GL_STATIC_DRAW);
 
     //UV buffer
     GLuint uvbuffer;
     glGenBuffers(1, &uvbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(vec2), &uvs[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, obj_comp->uvs.size() * sizeof(vec2), &obj_comp->uvs[0], GL_STATIC_DRAW);
 
     do {
         //Clear
@@ -138,7 +143,7 @@ int main_loop(void)
 		);
 
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+		glDrawArrays(GL_TRIANGLES, 0, obj_comp->vertices.size() );
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
